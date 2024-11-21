@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { GlobalService } from 'src/common/global.service';
 import * as WebSocket from 'ws';
 
 @Injectable()
@@ -10,7 +11,7 @@ export class MarketService {
    * Subscribe to a Binance WebSocket stream for a given symbol (persistent connection).
    */
   subscribeToMarketData(symbol: string, callback: (data: any) => void) {
-    const url = `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`;
+    const url = `${GlobalService.environmentVariable['BINANCE_WS_ADDRESS']}/${symbol.toLowerCase()}@trade`;
 
     if (this.streams.has(symbol)) {
       this.logger.log(`Already subscribed to market data for ${symbol}`);
@@ -45,7 +46,7 @@ export class MarketService {
    * Subscribe to market data for a single-use connection (ephemeral connection).
    */
   subscribeToMarketDataOnce(symbol: string, callback: (data: any) => void) {
-    const url = `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@trade`;
+    const url = `${GlobalService.environmentVariable['BINANCE_WS_ADDRESS']}/${symbol.toLowerCase()}@trade`;
 
     const ws = new WebSocket(url);
 

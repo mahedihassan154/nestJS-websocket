@@ -1,10 +1,11 @@
 import * as WebSocket from 'ws';
 import { Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
+import { GlobalService } from 'src/common/global.service';
 
 export class BinanceWebSocket {
   private readonly logger = new Logger(BinanceWebSocket.name);
-  private readonly ws: WebSocket = new WebSocket('wss://stream.binance.com:9443/ws');
+  private readonly ws: WebSocket = new WebSocket(`${GlobalService.environmentVariable['BINANCE_WS_ADDRESS']}`);
   private subscriptions: Record<string, string[]> = {};
 
   constructor() {
